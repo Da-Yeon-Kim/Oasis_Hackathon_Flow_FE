@@ -4,12 +4,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:convert';
-
 import '../widgets/custom_navigation_bar.dart';
 import 'search_results_screen.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
+
   @override
   MapScreenState createState() => MapScreenState();
 }
@@ -18,8 +18,6 @@ class MapScreenState extends State<MapScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   WebViewController? _controller;
   TextEditingController searchController = TextEditingController();
-  bool _isListening = false;
-  String _searchQuery = '';
 
   @override
   void initState() {
@@ -27,6 +25,8 @@ class MapScreenState extends State<MapScreen> {
     if (!kIsWeb) {
       _initializeWebView();
       _requestLocationPermission();
+    } else {
+      _loadHtmlForWeb();
     }
   }
 
@@ -49,6 +49,33 @@ class MapScreenState extends State<MapScreen> {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(Uri.parse(_buildHtmlUrl(lat, lng, jsonEncode(stores))));
+  }
+
+  void _loadHtmlForWeb() {
+    // Load the HTML content directly or use an iframe to embed a map
+    final htmlContent = '''
+      <html>
+        <head>
+          <title>Map</title>
+          <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_KAKAO_APP_KEY"></script>
+        </head>
+        <body>
+          <div id="map" style="width:100%;height:100%;"></div>
+          <script>
+            var container = document.getElementById('map');
+            var options = {
+              center: new kakao.maps.LatLng(37.5665, 126.9780),
+              level: 3
+            };
+            var map = new kakao.maps.Map(container, options);
+          </script>
+        </body>
+      </html>
+    ''';
+
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.dataFromString(htmlContent, mimeType: 'text/html', encoding: Encoding.getByName('utf-8')));
   }
 
   Future<Position> _getCurrentLocation() async {
@@ -88,16 +115,20 @@ class MapScreenState extends State<MapScreen> {
         title: TextField(
           controller: searchController,
           decoration: InputDecoration(
-            hintText: 'Search for a place...',
+            hintText: '장소를 검색중입니다.',
           ),
         ),
       ),
       body: kIsWeb
-          ? const Center(child: Text('웹 환경에서 지도는 HTML로 직접 로드됩니다.'))
+          ? (_controller != null
+          ? WebViewWidget(controller: _controller!)
+          : const Center(
+        child: Text('지도 로드 실패'),
+      ))
           : (_controller != null
           ? WebViewWidget(controller: _controller!)
           : const Center(
-        child: Text('This platform does not support WebView'),
+        child: Text('웹뷰를 지원하지 않습니다.'),
       )),
       bottomNavigationBar: CustomNavigationBar(
         selectedIndex: null,
@@ -122,7 +153,7 @@ class MapScreenState extends State<MapScreen> {
       })
           .toList();
     } else {
-      throw Exception('일치하는 가게가 없습니다.');
+      throw Exception('스토어 로드 실패');
     }
   }
 }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import '../widgets/custom_navigation_bar.dart'; // Adjust the path accordingly
 
 class TransactionListScreen extends StatefulWidget {
-  const TransactionListScreen({super.key});
-
   @override
   TransactionListScreenState createState() => TransactionListScreenState();
 }
 
 class TransactionListScreenState extends State<TransactionListScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<Map<String, String>> _transactions = [];
 
   @override
@@ -34,6 +34,7 @@ class TransactionListScreenState extends State<TransactionListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey, // Set the key for the Scaffold
       body: Container(
         width: 393,
         height: 852,
@@ -41,105 +42,6 @@ class TransactionListScreenState extends State<TransactionListScreen> {
         decoration: BoxDecoration(color: Colors.white),
         child: Stack(
           children: [
-            Positioned(
-              left: 0,
-              top: 743,
-              child: Container(
-                width: 393,
-                height: 109,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0)),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 26,
-                      child: Container(
-                        width: 393,
-                        height: 83,
-                        decoration: ShapeDecoration(
-                          color: Color(0xFFF8E6C7),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                          ),
-                          shadows: [
-                            BoxShadow(
-                              color: Color(0x26000000),
-                              blurRadius: 20,
-                              offset: Offset(0, -10),
-                              spreadRadius: 0,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 155,
-                      top: 0,
-                      child: Container(
-                        width: 83,
-                        height: 83,
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: OvalBorder(
-                            side: BorderSide(width: 3, color: Color(0xFFFACC7F)),
-                          ),
-                          shadows: [
-                            BoxShadow(
-                              color: Color(0x3F000000),
-                              blurRadius: 4,
-                              offset: Offset(0, 4),
-                              spreadRadius: 0,
-                            )
-                          ],
-                        ),
-                        child: FlutterLogo(),
-                      ),
-                    ),
-                    Positioned(
-                      left: 20,
-                      top: 48,
-                      child: Container(
-                        width: 45,
-                        height: 45,
-                        child: FlutterLogo(),
-                      ),
-                    ),
-                    Positioned(
-                      left: 328,
-                      top: 43,
-                      child: Container(
-                        width: 53,
-                        height: 53,
-                        padding: const EdgeInsets.symmetric(horizontal: 4.42, vertical: 11.04),
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              left: 155,
-              top: 743,
-              child: Container(
-                width: 83,
-                height: 83,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(),
-                child: FlutterLogo(),
-              ),
-            ),
             Positioned(
               left: 29,
               top: 112,
@@ -259,12 +161,11 @@ class TransactionListScreenState extends State<TransactionListScreen> {
                 ),
               ),
             ),
-            // Dynamic ListView for Transactions
             Positioned(
               left: 20,
-              top: 300, // Adjusted position to fit below the static UI
+              top: 300,
               right: 20,
-              bottom: 100, // Adjusted position to fit above the bottom navigation bar
+              bottom: 100,
               child: ListView.builder(
                 itemCount: _transactions.length,
                 itemBuilder: (context, index) {
@@ -319,6 +220,11 @@ class TransactionListScreenState extends State<TransactionListScreen> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomNavigationBar(
+        selectedIndex: null,
+        scaffoldKey: _scaffoldKey,
+        isMapScreen: false,
       ),
     );
   }
