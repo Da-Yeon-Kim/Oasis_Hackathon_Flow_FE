@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import '../widgets/custom_navigation_bar.dart';
 
 class ManageCardScreen extends StatelessWidget {
   const ManageCardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('카드 관리'),
         leading: IconButton(
@@ -79,7 +83,8 @@ class ManageCardScreen extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFBFDFFF),
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -95,7 +100,8 @@ class ManageCardScreen extends StatelessWidget {
                   },
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Color(0xFFBFDFFF)),
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -111,11 +117,12 @@ class ManageCardScreen extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // 카드 등록하기 로직
+                  Navigator.pushNamed(context, '/cards/register');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFFBFDFFF),
-                  padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 100, vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -129,23 +136,10 @@ class ManageCardScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: '',
-          ),
-        ],
-        selectedItemColor: Colors.orange,
-        unselectedItemColor: Colors.grey,
+      bottomNavigationBar: CustomNavigationBar(
+        selectedIndex: null, // 아무것도 선택되지 않은 상태로 유지
+        scaffoldKey: _scaffoldKey,
+        isMapScreen: false, // ManageCardScreen에서는 false로 설정
       ),
     );
   }

@@ -49,7 +49,7 @@ class CustomEndDrawer extends StatelessWidget {
               title: const Text('카드 관리'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, '/cards/register');
+                Navigator.pushNamed(context, '/cards/me');
               },
             ),
             ListTile(

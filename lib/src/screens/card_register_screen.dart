@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/custom_navigation_bar.dart';
 
 class CardRegistrationScreen extends StatefulWidget {
   const CardRegistrationScreen({super.key});
@@ -12,6 +13,7 @@ class _CardRegistrationScreenState extends State<CardRegistrationScreen> {
   final TextEditingController _expiryDateController = TextEditingController();
   final TextEditingController _cvcController = TextEditingController();
   bool _allAgreed = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void dispose() {
@@ -30,6 +32,7 @@ class _CardRegistrationScreenState extends State<CardRegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('카드 등록'),
         leading: IconButton(
@@ -149,7 +152,8 @@ class _CardRegistrationScreenState extends State<CardRegistrationScreen> {
               onPressed: _allAgreed ? _registerCard : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
-                padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 100, vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -162,23 +166,10 @@ class _CardRegistrationScreenState extends State<CardRegistrationScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: '',
-          ),
-        ],
-        selectedItemColor: Colors.orange,
-        unselectedItemColor: Colors.grey,
+      bottomNavigationBar: CustomNavigationBar(
+        selectedIndex: null, // 선택된 항목이 없음을 의미
+        scaffoldKey: _scaffoldKey,
+        isMapScreen: false, // 이 화면은 지도 화면이 아니므로 false로 설정
       ),
     );
   }
