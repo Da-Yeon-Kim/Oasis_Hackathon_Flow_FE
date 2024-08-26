@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import '../widgets/custom_navigation_bar.dart';
 
-class CardRecognizerScreen extends StatefulWidget {
+class CardRegistrationScreen extends StatefulWidget {
+  const CardRegistrationScreen({super.key});
+
   @override
-  State<CardRecognizerScreen> createState() => _CardRecognizerViewState();
+  State<CardRegistrationScreen> createState() => _CardRegistrationScreenState();
 }
 
-class _CardRecognizerViewState extends State<CardRecognizerScreen> {
+class _CardRegistrationScreenState extends State<CardRegistrationScreen> {
   final TextEditingController _cardNumberController = TextEditingController();
   final TextEditingController _expiryDateController = TextEditingController();
   final TextEditingController _cvcController = TextEditingController();
+  bool _allAgreed = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void dispose() {
@@ -18,186 +23,153 @@ class _CardRecognizerViewState extends State<CardRecognizerScreen> {
     super.dispose();
   }
 
+  void _toggleAgreement(bool? value) {
+    setState(() {
+      _allAgreed = value ?? false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.white,
-        child: Stack(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: const Text('카드 등록'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFFFFA40B)),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
           children: [
-            Positioned(
-              left: 29,
-              top: 112,
-              child: Text(
-                '카드 등록',
-                style: TextStyle(
-                  color: Color(0xFF333333),
-                  fontSize: 28,
-                  fontFamily: 'Noto Sans KR',
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.96,
-                ),
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.blue[100],
+                borderRadius: BorderRadius.circular(10),
               ),
-            ),
-            Positioned(
-              left: 37,
-              top: 64,
-              child: Container(
-                width: 16,
-                height: 33,
-                child: FlutterLogo(),
-              ),
-            ),
-            Positioned(
-              left: 0,
-              top: 743,
-              child: Container(
-                width: 393,
-                height: 109,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0)),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 26,
-                      child: Container(
-                        width: 393,
-                        height: 83,
-                        decoration: ShapeDecoration(
-                          color: Color(0xFFF8E6C7),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.credit_card, color: Colors.blue),
+                      SizedBox(width: 8),
+                      Text(
+                        '카드 정보를 입력해주세요',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: _cardNumberController,
+                    decoration: const InputDecoration(
+                      labelText: '카드번호',
+                      hintText: '0000 - 0000 - 0000 - 0000',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _expiryDateController,
+                          decoration: const InputDecoration(
+                            labelText: '유효기간',
+                            hintText: 'MM/YY',
+                            border: OutlineInputBorder(),
                           ),
-                          shadows: [
-                            BoxShadow(
-                              color: Color(0x26000000),
-                              blurRadius: 20,
-                              offset: Offset(0, -10),
-                              spreadRadius: 0,
-                            ),
-                          ],
+                          keyboardType: TextInputType.datetime,
                         ),
                       ),
-                    ),
-                    Positioned(
-                      left: 155,
-                      top: 0,
-                      child: Container(
-                        width: 83,
-                        height: 83,
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: OvalBorder(
-                            side: BorderSide(width: 3, color: Color(0xFFFACC7F)),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          controller: _cvcController,
+                          decoration: const InputDecoration(
+                            labelText: 'CVC',
+                            hintText: '카드 뒷면 3자리',
+                            border: OutlineInputBorder(),
                           ),
-                          shadows: [
-                            BoxShadow(
-                              color: Color(0x3F000000),
-                              blurRadius: 4,
-                              offset: Offset(0, 4),
-                              spreadRadius: 0,
-                            ),
-                          ],
-                        ),
-                        child: FlutterLogo(), // 이 부분에 적절한 로고 또는 아이콘을 넣을 수 있습니다.
-                      ),
-                    ),
-                    Positioned(
-                      left: 20,
-                      top: 48,
-                      child: Container(
-                        width: 45,
-                        height: 45,
-                        child: FlutterLogo(),
-                      ),
-                    ),
-                    Positioned(
-                      left: 328,
-                      top: 43,
-                      child: Container(
-                        width: 53,
-                        height: 53,
-                        padding: const EdgeInsets.symmetric(horizontal: 4.42, vertical: 11.04),
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            // 여기에 추가 요소가 필요하다면 추가 가능
-                          ],
+                          obscureText: true,
+                          keyboardType: TextInputType.number,
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            Positioned(
-              left: 155,
-              top: 743,
-              child: Container(
-                width: 83,
-                height: 83,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(),
-                child: FlutterLogo(),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.blue[50],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                children: [
+                  CheckboxListTile(
+                    value: _allAgreed,
+                    onChanged: _toggleAgreement,
+                    title: const Text('전체 약관 동의'),
+                    controlAffinity: ListTileControlAffinity.leading,
+                  ),
+                  const Divider(),
+                  CheckboxListTile(
+                    value: _allAgreed,
+                    onChanged: _toggleAgreement,
+                    title: const Text('카드 번호 데이터 수집 및 이용 동의'),
+                    controlAffinity: ListTileControlAffinity.leading,
+                  ),
+                  CheckboxListTile(
+                    value: _allAgreed,
+                    onChanged: _toggleAgreement,
+                    title: const Text('카드 이용 내역 정보 제공 동의'),
+                    controlAffinity: ListTileControlAffinity.leading,
+                  ),
+                  CheckboxListTile(
+                    value: _allAgreed,
+                    onChanged: _toggleAgreement,
+                    title: const Text('카드사로부터 개인정보 수집 및 이용 동의'),
+                    controlAffinity: ListTileControlAffinity.leading,
+                  ),
+                ],
               ),
             ),
-            Positioned.fill(
-              top: 180,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    TextField(
-                      controller: _cardNumberController,
-                      decoration: const InputDecoration(
-                        labelText: '카드 번호',
-                        filled: true,
-                        fillColor: Colors.white70,
-                      ),
-                      keyboardType: TextInputType.number,
-                    ),
-                    SizedBox(height: 10),
-                    TextField(
-                      controller: _expiryDateController,
-                      decoration: const InputDecoration(
-                        labelText: '유효기간 (MM/YY)',
-                        filled: true,
-                        fillColor: Colors.white70,
-                      ),
-                      keyboardType: TextInputType.datetime,
-                    ),
-                    SizedBox(height: 10),
-                    TextField(
-                      controller: _cvcController,
-                      decoration: const InputDecoration(
-                        labelText: 'CVC',
-                        filled: true,
-                        fillColor: Colors.white70,
-                      ),
-                      obscureText: true,
-                      keyboardType: TextInputType.number,
-                    ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _registerCard,
-                      child: const Text('카드 등록'),
-                    ),
-                  ],
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _allAgreed ? _registerCard : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 100, vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
+              ),
+              child: const Text(
+                '완료',
+                style: TextStyle(color: Colors.white, fontSize: 18),
               ),
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomNavigationBar(
+        selectedIndex: null, // 선택된 항목이 없음을 의미
+        scaffoldKey: _scaffoldKey,
+        isMapScreen: false, // 이 화면은 지도 화면이 아니므로 false로 설정
       ),
     );
   }
@@ -208,4 +180,3 @@ class _CardRecognizerViewState extends State<CardRecognizerScreen> {
     );
   }
 }
-

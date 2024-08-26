@@ -29,15 +29,16 @@ class CustomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8E6C7),
+        boxShadow: const [
           BoxShadow(
             color: Colors.black26,
             offset: Offset(0, -1),
             blurRadius: 10,
           ),
         ],
+        borderRadius: BorderRadius.circular(15), // 컨테이너의 둥근 모서리
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -51,7 +52,7 @@ class CustomNavigationBar extends StatelessWidget {
           _buildNavItem(
             context,
             icon: isMapScreen ? Icons.home : Icons.location_on,
-            label: isMapScreen ? '홈' : '지도',
+            label: '', // 가운데 아이템의 텍스트 제거
             index: 1,
             isCenter: true,
           ),
@@ -82,29 +83,32 @@ class CustomNavigationBar extends StatelessWidget {
             if (isCenter)
               Container(
                 padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.blue.shade700, // 원형 배경 색상
+                  color: Color(0xFFFDB132), // 원형 배경 색상
                 ),
                 child: Icon(
                   icon,
                   color: Colors.white,
-                  size: 32,
+                  size: 40, // 가운데 아이콘 크기
                 ),
               )
             else
               Icon(
                 icon,
-                color: selectedIndex == index ? Colors.blue : Colors.grey,
+                color: Color(0xFFFDB132),
+                size: 36, // '내 리뷰'와 '메뉴' 아이콘 크기 증가
               ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                color: selectedIndex == index ? Colors.blue : Colors.grey,
-                fontSize: 12,
+            if (!isCenter) // 가운데 아이템이 아닌 경우에만 텍스트 표시
+              const SizedBox(height: 4),
+            if (!isCenter) // 가운데 아이템이 아닌 경우에만 텍스트 표시
+              Text(
+                label,
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 14, // 텍스트 크기
+                ),
               ),
-            ),
           ],
         ),
       ),

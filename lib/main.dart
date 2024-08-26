@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterproject1/src/screens/ReviewFormScreen.dart';
 import 'package:flutterproject1/src/screens/review_register_screen.dart';
 import 'src/screens/login_screen.dart';
 import 'src/screens/register_screen.dart';
@@ -9,7 +10,8 @@ import 'src/screens/card_register_screen.dart';
 import 'src/screens/transaction_list_screen.dart';
 import 'src/screens/mileage_screen.dart';
 import 'src/screens/splash_screen.dart';
-import 'src/screens/search_results_screen.dart';
+import 'src/screens/card_my_screen.dart';
+import 'src/screens/place_detail_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,17 +29,20 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
+        '/': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomeScreen(),
         '/map': (context) => const MapScreen(),
+        '/store': (context) => const PlaceDetailScreen(),
         '/my_reviews': (context) => const MyReviewsScreen(),
-        '/cards/register': (context) => CardRecognizerScreen(),
-        '/transactions': (context) => const TransactionListScreen(),
+        '/cards/me': (context) => const ManageCardScreen(),
+        '/cards/register': (context) => const CardRegistrationScreen(),
+        '/transactions': (context) => TransactionListScreen(),
         '/mileage': (context) => const MileageScreen(),
-        '/review': (context) => ReviewPage(),
+        '/review': (context) => ReviewScreen(),
         '/my_review': (context) => const MyReviewsScreen(),
-        '/search_results': (context) => const SearchResultsScreen(query: ""),
+        '/ReviewForm': (context) => ReviewFormScreen(),
       },
     );
   }

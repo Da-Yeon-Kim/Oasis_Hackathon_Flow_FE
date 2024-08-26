@@ -37,7 +37,7 @@ class GifticonPurchaseScreen extends StatelessWidget {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: Text('Error'),
+                    title: Text('에러'),
                     content: Text(e.toString()),
                     actions: [
                       TextButton(
@@ -50,7 +50,7 @@ class GifticonPurchaseScreen extends StatelessWidget {
               );
             }
           },
-          child: Text('Purchase Gifticon'),
+          child: Text('기프티콘 구매하기'),
         ),
       ),
     );

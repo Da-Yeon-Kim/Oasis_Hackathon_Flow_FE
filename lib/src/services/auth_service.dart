@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:logger/logger.dart';
 
 class AuthService {
-  final String baseUrl = 'http://192.168.1.5:8000';
+  final String baseUrl = 'http://localhost:8000';
   final storage = const FlutterSecureStorage();
   final logger = Logger(); // 로거 인스턴스 생성
 

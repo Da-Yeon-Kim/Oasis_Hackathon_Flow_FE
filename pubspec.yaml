@@ -22,12 +22,15 @@ dependencies:
   camera_process: ^1.0.1
   webview_flutter: ^4.9.0
   flutter_svg: ^1.0.3
-  webview_flutter_platform_interface: ^2.10.0
+  fl_chart: ^0.40.0
+  barcode: ^2.1.0
+  webview_flutter_platform_interface: ^2.2.0
   webview_flutter_web: ^0.2.3
   webview_flutter_android: ^3.16.7
   webview_flutter_wkwebview: ^3.15.0
   geolocator: ^13.0.1
   url_launcher: ^6.3.0
+  google_maps_flutter: ^2.1.1
 
 dev_dependencies:
   flutter_test:
@@ -37,8 +40,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - lib/src/assets/kakao_map.html
-    - lib/src/assets/btn_map.svg
-    - lib/src/assets/btn_return.svg
-    - lib/src/assets/btn_search.svg
-    - lib/src/assets/Coffee.svg
+    - lib/src/assets/

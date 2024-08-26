@@ -1,36 +1,40 @@
 import 'package:flutter/material.dart';
-import '../services/api_service.dart';
+import '../widgets/custom_navigation_bar.dart'; // Adjust the path accordingly
 
 class TransactionListScreen extends StatefulWidget {
-  const TransactionListScreen({super.key});
-
   @override
   TransactionListScreenState createState() => TransactionListScreenState();
 }
 
 class TransactionListScreenState extends State<TransactionListScreen> {
-  final ApiService _apiService = ApiService();
-  List<dynamic> _transactions = [];
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  List<Map<String, String>> _transactions = [];
 
   @override
   void initState() {
     super.initState();
-    _fetchTransactions();
+    _generateMockData();
   }
 
-  void _fetchTransactions() async {
-    String userId = '1'; // 실제로는 로그인한 사용자의 ID를 사용
-    List<dynamic> transactions = await _apiService.fetchTransactions(userId);
-    if (!mounted) return; // mounted 체크 추가
+  void _generateMockData() {
+    List<Map<String, String>> mockData = List.generate(30, (index) {
+      return {
+        'merchant_name': '상점 $index',
+        'amount': '${(index + 1) * 1000}원',
+        'transaction_date': '2024-08-26',
+        'transaction_type': index % 2 == 0 ? 'Purchase' : 'Refund',
+      };
+    });
 
     setState(() {
-      _transactions = transactions;
+      _transactions = mockData;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey, // Set the key for the Scaffold
       body: Container(
         width: 393,
         height: 852,
@@ -38,104 +42,6 @@ class TransactionListScreenState extends State<TransactionListScreen> {
         decoration: BoxDecoration(color: Colors.white),
         child: Stack(
           children: [
-            Positioned(
-              left: 0,
-              top: 743,
-              child: Container(
-                width: 393,
-                height: 109,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(color: Colors.white.withOpacity(0)),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 26,
-                      child: Container(
-                        width: 393,
-                        height: 83,
-                        decoration: ShapeDecoration(
-                          color: Color(0xFFF8E6C7),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                          ),
-                          shadows: [
-                            BoxShadow(
-                              color: Color(0x26000000),
-                              blurRadius: 20,
-                              offset: Offset(0, -10),
-                              spreadRadius: 0,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 155,
-                      top: 0,
-                      child: Container(
-                        width: 83,
-                        height: 83,
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: OvalBorder(
-                            side: BorderSide(width: 3, color: Color(0xFFFACC7F)),
-                          ),
-                          shadows: [
-                            BoxShadow(
-                              color: Color(0x3F000000),
-                              blurRadius: 4,
-                              offset: Offset(0, 4),
-                              spreadRadius: 0,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 20,
-                      top: 48,
-                      child: Container(
-                        width: 45,
-                        height: 45,
-                        child: FlutterLogo(),
-                      ),
-                    ),
-                    Positioned(
-                      left: 328,
-                      top: 43,
-                      child: Container(
-                        width: 53,
-                        height: 53,
-                        padding: const EdgeInsets.symmetric(horizontal: 4.42, vertical: 11.04),
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              left: 155,
-              top: 743,
-              child: Container(
-                width: 83,
-                height: 83,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(),
-                child: FlutterLogo(),
-              ),
-            ),
             Positioned(
               left: 29,
               top: 112,
@@ -146,7 +52,6 @@ class TransactionListScreenState extends State<TransactionListScreen> {
                   fontSize: 28,
                   fontFamily: 'Noto Sans KR',
                   fontWeight: FontWeight.w700,
-                  height: 0,
                   letterSpacing: 1.96,
                 ),
               ),
@@ -195,7 +100,6 @@ class TransactionListScreenState extends State<TransactionListScreen> {
                                 fontSize: 18,
                                 fontFamily: 'Noto Sans KR',
                                 fontWeight: FontWeight.w400,
-                                height: 0,
                                 letterSpacing: 1.26,
                               ),
                             ),
@@ -206,7 +110,6 @@ class TransactionListScreenState extends State<TransactionListScreen> {
                                 fontSize: 20,
                                 fontFamily: 'Noto Sans KR',
                                 fontWeight: FontWeight.w500,
-                                height: 0,
                                 letterSpacing: 1.40,
                               ),
                             ),
@@ -227,7 +130,6 @@ class TransactionListScreenState extends State<TransactionListScreen> {
                                 fontSize: 18,
                                 fontFamily: 'Noto Sans KR',
                                 fontWeight: FontWeight.w400,
-                                height: 0,
                                 letterSpacing: 1.26,
                               ),
                             ),
@@ -238,7 +140,6 @@ class TransactionListScreenState extends State<TransactionListScreen> {
                                 fontSize: 20,
                                 fontFamily: 'Noto Sans KR',
                                 fontWeight: FontWeight.w500,
-                                height: 0,
                                 letterSpacing: 1.40,
                               ),
                             ),
@@ -249,7 +150,6 @@ class TransactionListScreenState extends State<TransactionListScreen> {
                                 fontSize: 18,
                                 fontFamily: 'Noto Sans KR',
                                 fontWeight: FontWeight.w500,
-                                height: 0,
                                 letterSpacing: 1.26,
                               ),
                             ),
@@ -261,12 +161,11 @@ class TransactionListScreenState extends State<TransactionListScreen> {
                 ),
               ),
             ),
-            // Dynamic ListView for Transactions
             Positioned(
               left: 20,
-              top: 300, // Adjusted position to fit below the static UI
+              top: 300,
               right: 20,
-              bottom: 100, // Adjusted position to fit above the bottom navigation bar
+              bottom: 100,
               child: ListView.builder(
                 itemCount: _transactions.length,
                 itemBuilder: (context, index) {
@@ -289,7 +188,7 @@ class TransactionListScreenState extends State<TransactionListScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          transaction['merchant_name'],
+                          transaction['merchant_name']!,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -297,7 +196,7 @@ class TransactionListScreenState extends State<TransactionListScreen> {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          '${transaction['amount']}원',
+                          '${transaction['amount']}',
                           style: TextStyle(
                             fontSize: 16,
                             color: transaction['transaction_type'] == 'Refund'
@@ -307,7 +206,7 @@ class TransactionListScreenState extends State<TransactionListScreen> {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          transaction['transaction_date'],
+                          transaction['transaction_date']!,
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey,
@@ -321,6 +220,11 @@ class TransactionListScreenState extends State<TransactionListScreen> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomNavigationBar(
+        selectedIndex: null,
+        scaffoldKey: _scaffoldKey,
+        isMapScreen: false,
       ),
     );
   }
