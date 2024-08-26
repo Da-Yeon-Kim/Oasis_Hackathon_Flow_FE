@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl = 'http://localhost:8000';
+  final String baseUrl = 'http://192.168.1.5:8000';
   Future<bool> registerCard(String userId, String cardNumber, String expiryDate, String cvc) async {
     final url = Uri.parse('$baseUrl/register-card/');
     final response = await http.post(

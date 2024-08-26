@@ -16,7 +16,7 @@ class SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 3), () {
       // Check if the widget is still mounted before navigating
       if (mounted) {
-        Navigator.pushReplacementNamed(context, '/members/login');
+        Navigator.pushReplacementNamed(context, '/login');
       }
     });
   }

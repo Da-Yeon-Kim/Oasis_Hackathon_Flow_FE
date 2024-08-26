@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import '../services/auth_service.dart';
+import '../services/auth_service.dart';
 import '../widgets/custom_text_field.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -12,14 +12,7 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  // final AuthService _authService = AuthService();
-
-  // Mock 데이터 추가 -----
-  final Map<String, String> _mockUserData = {
-    'test@example.com': 'password123',
-  };
-  // ---------------------
+  final AuthService _authService = AuthService();
 
   void _signIn() async {
     String email = _emailController.text;
@@ -27,7 +20,6 @@ class LoginScreenState extends State<LoginScreen> {
 
     if (email.isNotEmpty && password.isNotEmpty) {
       // 서버와의 통신 부분을 주석 처리하고 mock 데이터를 사용
-      /*
       bool success = await _authService.login(email, password);
       if (!mounted) return;
       if (success) {
@@ -37,19 +29,6 @@ class LoginScreenState extends State<LoginScreen> {
           const SnackBar(content: Text('로그인 실패')),
         );
       }
-      */
-
-      // Mock 데이터로 로그인 기능 구현 -----
-      if (_mockUserData.containsKey(email) &&
-          _mockUserData[email] == password) {
-        if (!mounted) return;
-        Navigator.pushNamed(context, '/home');
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('로그인 실패')),
-        );
-      }
-      // -----------------------------------
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('모든 필드를 입력하세요')),
@@ -61,7 +40,7 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sign In'),
+        title: const Text('로그인'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -69,24 +48,42 @@ class LoginScreenState extends State<LoginScreen> {
           children: <Widget>[
             CustomTextField(
               controller: _emailController,
-              labelText: 'Email',
+              labelText: '이메일',
             ),
             const SizedBox(height: 16),
             CustomTextField(
               controller: _passwordController,
-              labelText: 'Password',
+              labelText: '비밀번호',
               obscureText: true,
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _signIn,
-              child: const Text('Sign In'),
+              child: const Text(
+                  '회원가입',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontFamily: 'Noto Sans KR',
+                fontWeight: FontWeight.w500,
+                height: 0,
+                letterSpacing: 1.40,
+              ),),
             ),
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/members/register');
+                Navigator.pushNamed(context, '/register');
               },
-              child: const Text('Create Account'),
+              child: const Text(
+                  '회원가입',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontFamily: 'Noto Sans KR',
+                fontWeight: FontWeight.w500,
+                height: 0,
+                letterSpacing: 1.40,
+              ),),
             ),
           ],
         ),

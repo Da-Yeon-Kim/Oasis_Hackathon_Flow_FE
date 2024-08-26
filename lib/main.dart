@@ -21,15 +21,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'BacktotheLocal',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.yellow,
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const SplashScreen(),
-        '/members/login': (context) => const LoginScreen(),
-        '/members/register': (context) => const RegisterScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomeScreen(),
         '/map': (context) => const MapScreen(),
         '/my_reviews': (context) => const MyReviewsScreen(),
@@ -37,7 +36,7 @@ class MyApp extends StatelessWidget {
         '/transactions': (context) => const TransactionListScreen(),
         '/mileage': (context) => const MileageScreen(),
         '/review': (context) => ReviewPage(),
-        '/Myreview': (context) => const MyReviewsScreen(),
+        '/my_review': (context) => const MyReviewsScreen(),
         '/search_results': (context) => const SearchResultsScreen(query: ""),
       },
     );

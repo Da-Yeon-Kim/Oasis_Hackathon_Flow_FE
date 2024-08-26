@@ -4,14 +4,14 @@ import 'dart:convert';
 import 'package:logger/logger.dart';
 
 class AuthService {
-  final String baseUrl = 'http://localhost:8000/api';
+  final String baseUrl = 'http://192.168.1.5:8000';
   final storage = const FlutterSecureStorage();
   final logger = Logger(); // 로거 인스턴스 생성
 
   // 로그인 메서드
   Future<bool> login(String email, String password) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/members/login/'),
+      Uri.parse('$baseUrl/api/token/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -34,7 +34,7 @@ class AuthService {
   // 회원가입 메서드
   Future<bool> register(String nickname, String email, String password) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/members/register/'),
+      Uri.parse('$baseUrl/register/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -63,7 +63,7 @@ class AuthService {
     }
 
     final response = await http.get(
-      Uri.parse('$baseUrl/members/user/'),
+      Uri.parse('$baseUrl/api/auth/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
