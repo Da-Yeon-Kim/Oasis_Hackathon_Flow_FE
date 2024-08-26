@@ -1,11 +1,5 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart' as http;
-import 'package:webview_flutter/webview_flutter.dart';
-import 'dart:convert';
 import '../widgets/custom_navigation_bar.dart';
-import 'search_results_screen.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -16,120 +10,128 @@ class MapScreen extends StatefulWidget {
 
 class MapScreenState extends State<MapScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  WebViewController? _controller;
-  TextEditingController searchController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    if (!kIsWeb) {
-      _initializeWebView();
-      _requestLocationPermission();
-    } else {
-      _loadHtmlForWeb();
-    }
-  }
-
-  Future<void> _initializeWebView() async {
-    final position = await _getCurrentLocation();
-    final lat = position.latitude;
-    final lng = position.longitude;
-
-    final stores = await fetchStores(''); // 빈 검색어로 모든 가맹점 가져오기
-    final markers = jsonEncode(stores);
-
-    // Add the current location marker to the stores data
-    stores.add({
-      'name': '현재 위치',
-      'latitude': lat,
-      'longitude': lng,
-      'isCurrentLocation': true
-    });
-
-    _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(_buildHtmlUrl(lat, lng, jsonEncode(stores))));
-  }
-
-  void _loadHtmlForWeb() {
-    // Load the HTML content directly or use an iframe to embed a map
-    final htmlContent = '''
-      <html>
-        <head>
-          <title>Map</title>
-          <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_KAKAO_APP_KEY"></script>
-        </head>
-        <body>
-          <div id="map" style="width:100%;height:100%;"></div>
-          <script>
-            var container = document.getElementById('map');
-            var options = {
-              center: new kakao.maps.LatLng(37.5665, 126.9780),
-              level: 3
-            };
-            var map = new kakao.maps.Map(container, options);
-          </script>
-        </body>
-      </html>
-    ''';
-
-    _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.dataFromString(htmlContent, mimeType: 'text/html', encoding: Encoding.getByName('utf-8')));
-  }
-
-  Future<Position> _getCurrentLocation() async {
-    return await Geolocator.getCurrentPosition(
-      locationSettings: const LocationSettings(
-        accuracy: LocationAccuracy.high,
-      ),
-    );
-  }
-
-  void _requestLocationPermission() async {
-    await Geolocator.requestPermission();
-  }
-
-  String _buildHtmlUrl(double lat, double lng, String markers) {
-    final encodedMarkers = Uri.encodeComponent(markers);
-    return 'file:///android_asset/flutter_assets/assets/kakao_map.html?lat=$lat&lng=$lng&markers=$encodedMarkers';
-  }
+  final TextEditingController searchController = TextEditingController();
+  bool showSearchResults = false;
 
   void _searchPlace() {
-    final query = searchController.text;
-    if (query.isNotEmpty) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SearchResultsScreen(query: query),
-        ),
-      );
-    }
+    setState(() {
+      showSearchResults = true;
+    });
+  }
+
+  void _navigateToStore() {
+    Navigator.pushNamed(context, '/store');
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: TextField(
-          controller: searchController,
-          decoration: InputDecoration(
-            hintText: '장소를 검색중입니다.',
+      body: Stack(
+        children: [
+          // 배경 지도 이미지
+          SizedBox(
+            width: screenWidth,
+            height: screenHeight,
+            child: Image.asset(
+              'lib/src/assets/map.jpg',
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
+          // 검색창
+          Positioned(
+            top: screenHeight * 0.05,
+            left: screenWidth * 0.05,
+            right: screenWidth * 0.05,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: searchController,
+                      decoration: const InputDecoration(
+                        hintText: '검색어를 입력하세요...',
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: _searchPlace,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // 검색 결과
+          if (showSearchResults)
+            Positioned(
+              top: screenHeight * 0.15,
+              left: screenWidth * 0.05,
+              right: screenWidth * 0.05,
+              child: Container(
+                padding: EdgeInsets.all(screenWidth * 0.03),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildStoreItem(
+                      '60계치킨운암동림점',
+                      '치킨',
+                      '영업 중',
+                      '광주 북구 대자실로 23-1',
+                      'lib/src/assets/store1.png',
+                      screenWidth,
+                    ),
+                    _buildDivider(screenWidth),
+                    _buildStoreItem(
+                      '비에이치씨(BHC)운암동림점',
+                      '치킨',
+                      '영업 중',
+                      '광주 북구 서강로 89',
+                      'lib/src/assets/store2.png',
+                      screenWidth,
+                    ),
+                    _buildDivider(screenWidth),
+                    _buildStoreItem(
+                      '호식이두마리치킨(운암동2호점)',
+                      '치킨',
+                      '영업 중',
+                      '광주 북구 서강로66번길 3-3',
+                      'lib/src/assets/store3.jpg',
+                      screenWidth,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
       ),
-      body: kIsWeb
-          ? (_controller != null
-          ? WebViewWidget(controller: _controller!)
-          : const Center(
-        child: Text('지도 로드 실패'),
-      ))
-          : (_controller != null
-          ? WebViewWidget(controller: _controller!)
-          : const Center(
-        child: Text('웹뷰를 지원하지 않습니다.'),
-      )),
       bottomNavigationBar: CustomNavigationBar(
         selectedIndex: null,
         scaffoldKey: _scaffoldKey,
@@ -138,22 +140,71 @@ class MapScreenState extends State<MapScreen> {
     );
   }
 
-  Future<List<Map<String, dynamic>>> fetchStores(String query) async {
-    final apiKey = 'your_api_key_here';
-    final response = await http.get(Uri.parse(
-        'http://apis.data.go.kr/B190001/localFranchisesV2?serviceKey=$apiKey&type=json&keyword=$query'));
+  Widget _buildStoreItem(String name, String category, String status,
+      String address, String imagePath, double screenWidth) {
+    return GestureDetector(
+      onTap: _navigateToStore,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: screenWidth * 0.03),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.04,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    category,
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.035,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  SizedBox(height: screenWidth * 0.01),
+                  Text(
+                    status,
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.035,
+                      color: const Color(0xFF77B3F6),
+                    ),
+                  ),
+                  SizedBox(height: screenWidth * 0.01),
+                  Text(
+                    address,
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.03,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: screenWidth * 0.2,
+              height: screenWidth * 0.2,
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return (data['response']['body']['items'] as List)
-          .map((item) => {
-        'name': item['name'],
-        'latitude': double.parse(item['latitude']),
-        'longitude': double.parse(item['longitude']),
-      })
-          .toList();
-    } else {
-      throw Exception('스토어 로드 실패');
-    }
+  Widget _buildDivider(double screenWidth) {
+    return Divider(
+      color: const Color(0xFF77B3F6),
+      thickness: 1,
+      height: screenWidth * 0.03,
+    );
   }
 }
