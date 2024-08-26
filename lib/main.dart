@@ -35,11 +35,11 @@ class MyApp extends StatelessWidget {
         '/map': (context) => const MapScreen(),
         '/my_reviews': (context) => const MyReviewsScreen(),
         '/cards/register': (context) => const CardRegistrationScreen(),
-        '/transactions': (context) => const TransactionListScreen(),
+        '/transactions': (context) => TransactionListScreen(),
         '/mileage': (context) => const MileageScreen(),
         '/review': (context) => ReviewScreen(),
         '/my_review': (context) => const MyReviewsScreen(),
-        '/search_results': (context) => const SearchResultsScreen(query: ""),
+        '/search_results': (context) => const SearchResultsScreen(query: "", stores: [],),
         '/ReviewForm': (context) => ReviewFormScreen(),
       },
     );

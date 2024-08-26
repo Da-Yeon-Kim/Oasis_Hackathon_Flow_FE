@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class MyReviewsScreen extends StatefulWidget {
   const MyReviewsScreen({super.key});
@@ -19,14 +17,15 @@ class _MyReviewsScreenState extends State<MyReviewsScreen> {
   }
 
   Future<List<Review>> fetchReviews() async {
-    final response = await http.get(Uri.parse('http://localhost:8000/my-reviews/'));
-
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      return data.map((json) => Review.fromJson(json)).toList();
-    } else {
-      throw Exception('Failed to load reviews');
-    }
+    // 서버 대신 목업 데이터를 반환
+    await Future.delayed(Duration(seconds: 1)); // 서버 지연을 시뮬레이션
+    return [
+      Review(title: '멋진 카페', content: '아늑하고 분위기 있는 카페였습니다.', date: '2024-08-01'),
+      Review(title: '좋은 레스토랑', content: '음식이 정말 맛있었어요.', date: '2024-08-02'),
+      Review(title: '훌륭한 서비스', content: '직원들이 매우 친절했습니다.', date: '2024-08-03'),
+      Review(title: '아쉬운 경험', content: '기대에 미치지 못했어요.', date: '2024-08-04'),
+      Review(title: '재방문 의사 있음', content: '다시 가고 싶어요!', date: '2024-08-05'),
+    ];
   }
 
   @override

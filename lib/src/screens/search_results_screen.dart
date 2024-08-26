@@ -6,7 +6,7 @@ import 'place_detail_screen.dart'; // 추가
 class SearchResultsScreen extends StatefulWidget {
   final String query;
 
-  const SearchResultsScreen({super.key, required this.query});
+  const SearchResultsScreen({super.key, required this.query, required List<Map<String, dynamic>> stores});
 
   @override
   SearchResultsScreenState createState() => SearchResultsScreenState();

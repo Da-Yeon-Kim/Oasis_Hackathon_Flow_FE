@@ -4,36 +4,12 @@ import '../services/auth_service.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
-  @override
-  LoginScreenState createState() => LoginScreenState();
-}
-
-class LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
-  final AuthService _authService = AuthService();
-
-  void _signIn() async {
-    String email = _emailController.text;
-    String password = _passwordController.text;
-
-    if (email.isNotEmpty && password.isNotEmpty) {
-      bool success = await _authService.login(email, password);
-      if (!mounted) return;
-      if (success) {
-        Navigator.pushNamed(context, '/home');
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('로그인 실패')),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('모든 필드를 입력하세요')),
-      );
-    }
-  }
+  const CustomTextField({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    this.obscureText = false, Color? backgroundColor,
+  });
 
   @override
   Widget build(BuildContext context) {
