@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         '/my_reviews': (context) => const MyReviewsScreen(),
         '/cards/me': (context) => const ManageCardScreen(),
         '/cards/register': (context) => const CardRegistrationScreen(),
-        '/transactions': (context) => const TransactionListScreen(),
+        '/transactions': (context) => TransactionListScreen(),
         '/mileage': (context) => const MileageScreen(),
         '/review': (context) => ReviewScreen(),
         '/my_review': (context) => const MyReviewsScreen(),

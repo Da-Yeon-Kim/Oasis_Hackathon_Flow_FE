@@ -40,16 +40,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - lib/src/assets/kakao_map.html
-    - lib/src/assets/btn_map.svg
-    - lib/src/assets/btn_return.svg
-    - lib/src/assets/btn_search.svg
-    - lib/src/assets/Coffee.svg
-    - lib/src/assets/Rectangle 21.png
-    - lib/src/assets/Rectangle 23.png
-    - lib/src/assets/Rectangle 24.png
-    - lib/src/assets/barcode.png
-    - lib/src/assets/barcode2.png
-    - lib/src/assets/barcode3.png
-    - lib/src/assets/barcode4.png
-    - lib/src/assets/barcode5.png
+    - lib/src/assets/
